@@ -1,5 +1,7 @@
 # Multi-PDF Comparison Tool (PS 35)
 
+**Live demo:** https://llm-ps35-35.vercel.app
+
 **Problem statement:** Comparing several documents is tedious. Upload 2–3 PDFs and ask comparison questions across them.
 
 **Approach:** Each PDF gets its own FAISS retriever → for a question, the top chunks are retrieved from *each* PDF separately → one prompt asks the LLM to answer as a comparison table (one column per document, "Not mentioned" when a PDF lacks the info).
@@ -22,6 +24,17 @@
 - LangChain + FAISS (one vector store per PDF), pypdf for text extraction
 - FastEmbed `BAAI/bge-small-en-v1.5` embeddings (free, runs locally on CPU)
 - LLM: Qwen 2.5 14B via an OpenAI-compatible endpoint (default), Llama 3.3 70B via Groq, Gemini 2.5 Flash, or a local Ollama model
+
+## Web version (Vercel)
+A minimal web UI (`web/`) deployed on Vercel: PDFs are read in the browser with pdf.js, and a small Python
+serverless function (standard library only) builds a BM25 index per PDF, retrieves the top passages from each one,
+and streams the answer from the LLM using the same prompt as the Streamlit app (`src/prompt.py`).
+
+```bash
+python web/dev_server.py        # local preview at http://localhost:3000
+cd web && vercel deploy --prod  # deploy
+```
+Vercel environment variables: `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY_ENV` and the key itself (`QWEN_API_KEY`).
 
 ## How to run
 **Quick start (Windows):** double-click `run.bat` (Mac/Linux: `./run.sh`), then add your key to `.env`.
@@ -55,6 +68,8 @@ For Groq, set `GROQ_API_KEY` (free key at https://console.groq.com/keys).
 ## Project structure
 ```
 app.py                  Streamlit UI
+web/                    Web UI + Vercel serverless API
+src/prompt.py           The comparison prompt (shared by both UIs)
 src/pdf_compare.py      PDF loading, per-PDF retrievers, prompt, LLM call
 sample_pdfs/            3 sample laptop spec sheets
 tests/                  sample PDF generator + pipeline test (pytest)
@@ -64,7 +79,7 @@ tests/                  sample PDF generator + pipeline test (pytest)
 ```bash
 pytest -q
 ```
-8 tests: indexing, per-PDF retrieval, prompt building, bad/blank PDF handling, table export, and a full UI flow test.
+15 tests: indexing, per-PDF retrieval, prompt building, bad/blank PDF handling, table export, a full UI flow test, the web API (BM25 retrieval, validation, health) and a check that both UIs use the same prompt.
 
 ## Docker
 ```bash
@@ -72,6 +87,10 @@ docker build -t pdf-compare . && docker run -p 8501:8501 --env-file .env pdf-com
 ```
 
 ## Screenshots
+Web UI (live on Vercel):
+
+![Web UI](screenshots/05_web_ui.png)
+
 Real outputs from Qwen 2.5 14B on the three sample PDFs (more in `screenshots/`).
 
 ![Price, features and warranty comparison](screenshots/01_price_features_warranty.jpg)

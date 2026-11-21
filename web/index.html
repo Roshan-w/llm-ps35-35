@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-PDF Comparison Tool</title>
+  <meta name="description" content="Upload 2–3 PDFs and ask comparison questions across them. Answers come back as a side-by-side table with page citations.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c1917'/%3E%3Crect x='8' y='9' width='7' height='14' rx='1.5' fill='%23fff'/%3E%3Crect x='17' y='9' width='7' height='14' rx='1.5' fill='%23fff' opacity='.55'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="/" aria-label="Multi-PDF Comparison Tool home">
+        <span class="mark" aria-hidden="true"><i></i><i></i></span>
+        <span>Compare</span>
+      </a>
+      <div class="status" id="status" role="status" aria-live="polite">
+        <span class="dot"></span><span class="status-text">Checking model…</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Compare documents, side by side.</h1>
+      <p>Upload two or three PDFs and ask a question. Every document is searched separately, and the answer
+        comes back as one table with page citations, so no file gets left out.</p>
+    </section>
+
+    <section class="card" aria-labelledby="docs-title">
+      <div class="card-head">
+        <span class="step">01</span>
+        <h2 id="docs-title">Documents</h2>
+        <span class="card-hint" id="doc-count">0 of 3</span>
+      </div>
+
+      <label class="drop" id="drop" for="file">
+        <input id="file" type="file" accept="application/pdf" multiple hidden>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+        <span><strong>Drop PDFs here</strong> or <u>browse</u></span>
+        <small>2–3 files · text-based PDFs · processed in your browser</small>
+      </label>
+
+      <ul class="files" id="files" aria-live="polite"></ul>
+
+      <div class="card-foot">
+        <button class="link" id="samples" type="button">Use the 3 sample laptop spec sheets</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="q-title">
+      <div class="card-head">
+        <span class="step">02</span>
+        <h2 id="q-title">Question</h2>
+      </div>
+
+      <label class="sr-only" for="question">Your comparison question</label>
+      <textarea id="question" rows="3" maxlength="600"
+        placeholder="e.g. Compare the price, features and warranty offered in each document."></textarea>
+
+      <div class="chips" id="chips" aria-label="Suggested questions"></div>
+
+      <div class="actions">
+        <details class="settings">
+          <summary>Settings</summary>
+          <label for="k">Passages per PDF <output id="k-out">4</output></label>
+          <input id="k" type="range" min="2" max="8" value="4">
+        </details>
+        <span class="kbd-hint"><kbd>Ctrl</kbd> <kbd>Enter</kbd></span>
+        <button class="btn secondary" id="overview" type="button">Quick overview</button>
+        <button class="btn primary" id="compare" type="button">Compare</button>
+      </div>
+      <p class="notice" id="notice" role="alert" hidden></p>
+    </section>
+
+    <section id="results" class="results" aria-live="polite" aria-label="Answers"></section>
+
+    <section class="empty" id="empty">
+      <div class="how">
+        <div><b>1</b><span>Each PDF gets its own search index</span></div>
+        <div><b>2</b><span>The best passages are taken from every PDF</span></div>
+        <div><b>3</b><span>One prompt asks the model for a comparison table</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <span>Multi-PDF Comparison Tool · LLM mini project PS 35</span>
+    <span>Qwen 2.5 14B · <a href="https://github.com/Roshan-w/llm-ps35-35">Source on GitHub</a></span>
+  </footer>
+
+  <template id="result-tpl">
+    <article class="result">
+      <header>
+        <h3 class="q"></h3>
+        <p class="meta"></p>
+      </header>
+      <div class="answer md"><div class="skeleton"><i></i><i></i><i></i><i></i></div></div>
+      <footer class="result-foot" hidden>
+        <div class="tools">
+          <button class="tool" data-act="copy" type="button">Copy</button>
+          <button class="tool" data-act="md" type="button">Markdown</button>
+          <button class="tool" data-act="csv" type="button">CSV</button>
+        </div>
+        <details class="sources"><summary>Sources</summary><div class="src-list"></div></details>
+      </footer>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

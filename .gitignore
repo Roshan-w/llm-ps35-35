@@ -4,3 +4,9 @@ venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Vercel CLI files (contain a token)
+.vercel/
+.env*.local
+web/.vercel/
+web/.env*.local

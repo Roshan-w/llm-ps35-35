@@ -9,7 +9,25 @@ from src.pdf_compare import (LLM_MODEL, OVERVIEW_QUESTION, build_index, compare,
 
 load_dotenv()
 
-st.set_page_config(page_title="Multi-PDF Comparison Tool", page_icon="📑", layout="wide")
+st.set_page_config(page_title="Multi-PDF Comparison Tool", page_icon="📑", layout="centered")
+
+STYLE = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+html, body, [class*="css"], .stMarkdown, .stTextArea textarea, button { font-family: Inter, system-ui, sans-serif !important; }
+.block-container { max-width: 900px; padding-top: 2.5rem; }
+h1 { font-weight: 600 !important; letter-spacing: -.025em; }
+[data-testid="stSidebar"] { border-right: 1px solid #e7e5e4; }
+[data-testid="stVerticalBlockBorderWrapper"] { border-color: #e7e5e4 !important; border-radius: 12px !important; background: #fff; }
+.stButton button, .stDownloadButton button { border-radius: 9px; font-weight: 500; }
+.stTextArea textarea { border-radius: 10px; }
+[data-testid="stMarkdownContainer"] table { border-collapse: collapse; font-size: 14px; width: 100%; }
+[data-testid="stMarkdownContainer"] th { background: #f5f5f4; color: #78716c; font-weight: 600; font-size: 13px; }
+[data-testid="stMarkdownContainer"] th, [data-testid="stMarkdownContainer"] td { border: 1px solid #e7e5e4; padding: 8px 12px; }
+[data-testid="stFileUploaderDropzone"] { border-radius: 10px; }
+</style>
+"""
+st.markdown(STYLE, unsafe_allow_html=True)
 
 SAMPLE_QUESTIONS = [
     "Compare the price, features and warranty offered in each document.",
