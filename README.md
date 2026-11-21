@@ -107,16 +107,24 @@ docker build -t pdf-compare . && docker run -p 8501:8501 --env-file .env pdf-com
 ```
 
 ## Screenshots
-Website (live on Vercel): landing page, workspace, and dark mode.
+All taken on the live website with real answers from Qwen 2.5 14B.
 
-![Landing page](screenshots/05_web_ui.png)
+**Landing page**
 
-![Workspace](screenshots/06_web_result.png)
+![Landing page](screenshots/01_landing_page.png)
 
-![Workspace in dark mode](screenshots/07_web_dark.png)
+**How it works and why it works**
 
-Streamlit app: real outputs from Qwen 2.5 14B on the three sample PDFs (more in `screenshots/`).
+![How it works](screenshots/02_how_it_works.png)
 
-![Price, features and warranty comparison](screenshots/01_price_features_warranty.jpg)
+**Workspace: comparing three laptop spec sheets** (answered in 21.9 s)
 
-![Which laptop suits a student on a budget](screenshots/04_student_budget.jpg)
+![Workspace with a comparison answer](screenshots/03_workspace_answer.png)
+
+**The answer with its source passages**
+
+![Answer with sources](screenshots/04_answer_with_sources.png)
+
+**Dark mode: comparing three health-insurance policies** (answered in 29.2 s)
+
+![Dark mode, health insurance comparison](screenshots/05_dark_mode_insurance.png)
