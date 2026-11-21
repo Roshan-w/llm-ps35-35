@@ -1,6 +1,10 @@
 # Multi-PDF Comparison Tool (PS 35)
 
-**Live demo:** https://llm-ps35-35.vercel.app
+**Live website:** https://llm-ps35-35.vercel.app · **Open the tool:** https://llm-ps35-35.vercel.app/app
+
+**Demo video (1 min 44 s, narrated):** [watch `demo/demo_video.mp4`](demo/demo_video.mp4)
+
+[![Demo video: Compare documents, side by side](demo/thumbnail.jpg)](demo/demo_video.mp4)
 
 **Problem statement:** Comparing several documents is tedious. Upload 2–3 PDFs and ask comparison questions across them.
 
@@ -20,21 +24,36 @@
 - Clear errors for scanned, blank, password-protected or invalid PDFs; auto-retry on rate limits
 
 ## Tech stack
-- Python, Streamlit (UI)
+- Python; Streamlit (local UI) and a web version (HTML/CSS/JS + Python serverless API) on Vercel
 - LangChain + FAISS (one vector store per PDF), pypdf for text extraction
 - FastEmbed `BAAI/bge-small-en-v1.5` embeddings (free, runs locally on CPU)
 - LLM: Qwen 2.5 14B via an OpenAI-compatible endpoint (default), Llama 3.3 70B via Groq, Gemini 2.5 Flash, or a local Ollama model
 
 ## Web version (Vercel)
-A landing page (`/`, how it works, infographics, architecture, FAQ) and a dashboard workspace (`/app`) with Pip, an animated SVG mascot, in a soft rose theme with light and dark modes, deployed on Vercel: PDFs are read in the browser with pdf.js, and a small Python
-serverless function (standard library only) builds a BM25 index per PDF, retrieves the top passages from each one,
-and streams the answer from the LLM using the same prompt as the Streamlit app (`src/prompt.py`).
+The project is live at **https://llm-ps35-35.vercel.app** and has two pages:
+
+| Page | What it shows |
+|---|---|
+| **Landing page** (`/`) | What the tool does, a 4-step "How it works" infographic, a chart of why each PDF gets its own index, an architecture diagram, features, a real sample output and an FAQ |
+| **Workspace** (`/app`) | The comparison tool: sidebar, composer with PDF chips, live model status, context meter, documents list, recent questions, and streamed answers with sources and CSV/Markdown export |
+
+Design: a soft rose theme with light and dark modes, rounded panels and **Pip**, an animated SVG mascot that thinks while an answer streams and smiles when it's done.
+
+How it works: PDFs are read **in the browser** with pdf.js (files are never uploaded). A small Python serverless
+function (standard library only) builds a BM25 index per PDF, takes the top passages from each one, and streams the
+answer from Qwen 2.5 14B using the same prompt as the Streamlit app (`src/prompt.py`). The model runs on a lab GPU
+and is reached through a key-protected tunnel.
 
 ```bash
 python web/dev_server.py        # local preview at http://localhost:3000
 cd web && vercel deploy --prod  # deploy
 ```
 Vercel environment variables: `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY_ENV` and the key itself (`QWEN_API_KEY`).
+
+## Demo video
+[`demo/demo_video.mp4`](demo/demo_video.mp4): a 1 min 44 s walkthrough of the website with a narrated voiceover, captions,
+music and sound effects. It covers the problem, how it works, why each PDF gets its own index, a live comparison
+(including a "Not mentioned" cell and its source passage), the architecture and the key numbers.
 
 ## How to run
 **Quick start (Windows):** double-click `run.bat` (Mac/Linux: `./run.sh`), then add your key to `.env`.
@@ -68,7 +87,8 @@ For Groq, set `GROQ_API_KEY` (free key at https://console.groq.com/keys).
 ## Project structure
 ```
 app.py                  Streamlit UI
-web/                    Web UI + Vercel serverless API
+web/                    Website: landing page, workspace and Vercel serverless API
+demo/                   Demo video and its thumbnail
 src/prompt.py           The comparison prompt (shared by both UIs)
 src/pdf_compare.py      PDF loading, per-PDF retrievers, prompt, LLM call
 sample_pdfs/            3 sample laptop spec sheets
@@ -87,13 +107,15 @@ docker build -t pdf-compare . && docker run -p 8501:8501 --env-file .env pdf-com
 ```
 
 ## Screenshots
-Web version (live on Vercel): landing page and workspace.
+Website (live on Vercel): landing page, workspace, and dark mode.
 
 ![Landing page](screenshots/05_web_ui.png)
 
 ![Workspace](screenshots/06_web_result.png)
 
-Real outputs from Qwen 2.5 14B on the three sample PDFs (more in `screenshots/`).
+![Workspace in dark mode](screenshots/07_web_dark.png)
+
+Streamlit app: real outputs from Qwen 2.5 14B on the three sample PDFs (more in `screenshots/`).
 
 ![Price, features and warranty comparison](screenshots/01_price_features_warranty.jpg)
 
