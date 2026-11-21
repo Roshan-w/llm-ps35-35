@@ -3,116 +3,299 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multi-PDF Comparison Tool</title>
-  <meta name="description" content="Upload 2–3 PDFs and ask comparison questions across them. Answers come back as a side-by-side table with page citations.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c1917'/%3E%3Crect x='8' y='9' width='7' height='14' rx='1.5' fill='%23fff'/%3E%3Crect x='17' y='9' width='7' height='14' rx='1.5' fill='%23fff' opacity='.55'/%3E%3C/svg%3E">
+  <title>Compare · Multi-PDF Comparison Tool</title>
+  <meta name="description" content="Upload 2–3 PDFs and ask one question. Every document is searched separately and the answer comes back as one comparison table with page citations.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23221c1d'/%3E%3Crect x='9' y='9' width='5.5' height='14' rx='2' fill='%23fff'/%3E%3Crect x='17.5' y='9' width='5.5' height='14' rx='2' fill='%23fff' opacity='.55'/%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("compare-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Doto:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/landing.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="/" aria-label="Multi-PDF Comparison Tool home">
-        <span class="mark" aria-hidden="true"><i></i><i></i></span>
-        <span>Compare</span>
-      </a>
-      <div class="status" id="status" role="status" aria-live="polite">
-        <span class="dot"></span><span class="status-text">Checking model…</span>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>COMPARE</a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#how">How it works</a>
+        <a href="#why">Why it works</a>
+        <a href="#hood">Under the hood</a>
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav-right">
+        <span class="status" id="status"><span class="dot"></span><span class="status-text">Checking…</span></span>
+        <div class="theme-switch" role="group" aria-label="Theme">
+          <button type="button" data-theme-set="dark" aria-label="Dark mode" data-icon="moon"></button>
+          <button type="button" data-theme-set="light" aria-label="Light mode" data-icon="sun"></button>
+        </div>
+        <a class="btn btn-ink" href="/app">Open app
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <h1>Compare documents, side by side.</h1>
-      <p>Upload two or three PDFs and ask a question. Every document is searched separately, and the answer
-        comes back as one table with page citations, so no file gets left out.</p>
+  <main>
+    <!-- HERO -->
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <span class="chip rose-chip">LLM mini project · PS 35</span>
+        <h1><span class="grad">Compare documents,</span><br>side by side.</h1>
+        <p class="lead">Upload two or three PDFs and ask one question. Each document is searched on its own, and the answer
+          comes back as a single comparison table with page citations. No document is left out, and nothing is made up.</p>
+        <div class="hero-cta">
+          <a class="btn btn-ink btn-lg" href="/app">Start comparing</a>
+          <a class="btn btn-ghost btn-lg" href="#how">See how it works</a>
+        </div>
+        <ul class="hero-points">
+          <li>Answers stream in live</li><li>Says “Not mentioned” instead of guessing</li><li>PDFs never leave your browser</li>
+        </ul>
+      </div>
+
+      <div class="hero-art">
+        <div class="glow-blob" style="width:420px;height:420px;left:8%;top:6%"></div>
+        <div class="pip hero-pip" data-pip></div>
+
+        <div class="float-card fc-docs">
+          <div class="fc-title">Documents</div>
+          <div class="fc-doc"><span class="pdf-ic">PDF</span>laptop_alpha.pdf<i class="ok"></i></div>
+          <div class="fc-doc"><span class="pdf-ic">PDF</span>laptop_beta.pdf<i class="ok"></i></div>
+          <div class="fc-doc"><span class="pdf-ic">PDF</span>laptop_gamma.pdf<i class="ok"></i></div>
+        </div>
+        <div class="float-card fc-time">
+          <div class="fc-title">Answered in</div>
+          <div class="dots big">17.4<small>s</small></div>
+        </div>
+        <div class="float-card fc-table">
+          <table>
+            <tr><th>Aspect</th><th>Alpha</th><th>Beta</th><th>Gamma</th></tr>
+            <tr><td>Price</td><td>₹54,999</td><td>₹72,500</td><td>₹46,990</td></tr>
+            <tr><td>Warranty</td><td>1 yr</td><td>2 yr</td><td class="nm">Not mentioned</td></tr>
+          </table>
+        </div>
+        <div class="float-card fc-meter">
+          <div class="fc-row"><span class="fc-title">Context used</span><b>18%</b></div>
+          <div class="meter" data-meter="18" data-ticks="26"></div>
+        </div>
+      </div>
     </section>
 
-    <section class="card" aria-labelledby="docs-title">
-      <div class="card-head">
-        <span class="step">01</span>
-        <h2 id="docs-title">Documents</h2>
-        <span class="card-hint" id="doc-count">0 of 3</span>
+    <!-- STATS -->
+    <section class="wrap stats reveal" aria-label="At a glance">
+      <div class="stat"><div class="dots num">3</div><span>PDFs compared at once</span></div>
+      <div class="stat"><div class="dots num">4</div><span>passages taken from every PDF</span></div>
+      <div class="stat"><div class="dots num">32K</div><span>token context window</span></div>
+      <div class="stat"><div class="dots num">0</div><span>files uploaded or stored</span></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how" class="wrap section">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>From three PDFs to one clear table</h2>
+        <p>Four steps, a few seconds each. Here is what happens after you press Compare.</p>
       </div>
+      <ol class="steps">
+        <li class="step panel reveal">
+          <span class="step-n dots">01</span>
+          <div class="step-art art-upload">
+            <span class="paper p1"></span><span class="paper p2"></span><span class="paper p3"></span>
+          </div>
+          <h3>Upload 2–3 PDFs</h3>
+          <p>Drop your files in. They are read right in your browser with pdf.js, page by page.</p>
+        </li>
+        <li class="step panel reveal">
+          <span class="step-n dots">02</span>
+          <div class="step-art art-index">
+            <div class="col"><i></i><i></i><i></i><i></i></div>
+            <div class="col"><i></i><i></i><i></i><i></i></div>
+            <div class="col"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <h3>Index each one separately</h3>
+          <p>Every PDF is split into ~1,000-character passages and gets its own search index (BM25).</p>
+        </li>
+        <li class="step panel reveal">
+          <span class="step-n dots">03</span>
+          <div class="step-art art-retrieve">
+            <div class="col"><i class="hit"></i><i></i><i class="hit"></i><i></i></div>
+            <div class="col"><i></i><i class="hit"></i><i class="hit"></i><i></i></div>
+            <div class="col"><i class="hit"></i><i></i><i></i><i class="hit"></i></div>
+          </div>
+          <h3>Pull the best passages from every PDF</h3>
+          <p>Your question is matched against each index, so every document contributes its top passages.</p>
+        </li>
+        <li class="step panel reveal">
+          <span class="step-n dots">04</span>
+          <div class="step-art art-table">
+            <div class="mini-t"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="nm"></i><i></i><i></i></div>
+          </div>
+          <h3>Get one comparison table</h3>
+          <p>Qwen 2.5 14B writes a table, key differences and a summary, citing pages, and streams it to you.</p>
+        </li>
+      </ol>
+    </section>
 
-      <label class="drop" id="drop" for="file">
-        <input id="file" type="file" accept="application/pdf" multiple hidden>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
-        <span><strong>Drop PDFs here</strong> or <u>browse</u></span>
-        <small>2–3 files · text-based PDFs · processed in your browser</small>
-      </label>
-
-      <ul class="files" id="files" aria-live="polite"></ul>
-
-      <div class="card-foot">
-        <button class="link" id="samples" type="button">Use the 3 sample laptop spec sheets</button>
+    <!-- WHY -->
+    <section id="why" class="wrap section">
+      <div class="why panel reveal">
+        <div class="why-copy">
+          <span class="eyebrow">Why it works</span>
+          <h2>A separate search for every document</h2>
+          <p>A normal “chat with your PDFs” tool puts everything in one shared index. Ask a comparison question and the
+            longest or most keyword-heavy file wins: its passages fill the prompt, and the others are barely heard.</p>
+          <p>This tool searches each PDF on its own and takes the same number of passages from each one, so the model always
+            sees all sides before it compares.</p>
+        </div>
+        <div class="why-chart" aria-label="Share of passages in the prompt">
+          <div class="bars-group">
+            <div class="bars-title">One shared index</div>
+            <div class="bar-row"><span>Alpha</span><div class="bar"><i style="--w:75%"></i></div><b>75%</b></div>
+            <div class="bar-row"><span>Beta</span><div class="bar"><i style="--w:25%"></i></div><b>25%</b></div>
+            <div class="bar-row"><span>Gamma</span><div class="bar"><i style="--w:0%"></i></div><b>0%</b></div>
+          </div>
+          <div class="bars-group good">
+            <div class="bars-title">One index per PDF <span class="chip rose-chip">this tool</span></div>
+            <div class="bar-row"><span>Alpha</span><div class="bar"><i style="--w:33%"></i></div><b>33%</b></div>
+            <div class="bar-row"><span>Beta</span><div class="bar"><i style="--w:33%"></i></div><b>33%</b></div>
+            <div class="bar-row"><span>Gamma</span><div class="bar"><i style="--w:33%"></i></div><b>33%</b></div>
+          </div>
+          <p class="chart-note">Illustration: share of the prompt’s passages that come from each document.</p>
+        </div>
       </div>
     </section>
 
-    <section class="card" aria-labelledby="q-title">
-      <div class="card-head">
-        <span class="step">02</span>
-        <h2 id="q-title">Question</h2>
+    <!-- UNDER THE HOOD -->
+    <section id="hood" class="section hood">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Under the hood</span>
+          <h2>Where each part runs</h2>
+          <p>Small, private and fast to load: the heavy lifting happens on a lab GPU.</p>
+        </div>
+        <div class="pipeline reveal">
+          <div class="node">
+            <span class="node-tag">Your browser</span>
+            <h4>Read PDFs</h4>
+            <p>pdf.js extracts text page by page. Files are never uploaded.</p>
+          </div>
+          <div class="link"><span></span></div>
+          <div class="node">
+            <span class="node-tag">Vercel function</span>
+            <h4>Search &amp; build prompt</h4>
+            <p>One BM25 index per PDF, top passages from each, one prompt.</p>
+          </div>
+          <div class="link"><span></span></div>
+          <div class="node node-dark">
+            <span class="node-tag">Lab GPU server</span>
+            <h4>Qwen 2.5 14B</h4>
+            <p>Served by llama.cpp, reached through a secure, key-protected tunnel.</p>
+          </div>
+          <div class="link"><span></span></div>
+          <div class="node">
+            <span class="node-tag">Back to you</span>
+            <h4>Streamed table</h4>
+            <p>Tokens arrive live; export to CSV or Markdown when done.</p>
+          </div>
+        </div>
+        <div class="specs reveal">
+          <div><span>Model</span><b>Qwen 2.5 14B Instruct</b></div>
+          <div><span>Context window</span><b>32,768 tokens</b></div>
+          <div><span>Retrieval</span><b>BM25, per document</b></div>
+          <div><span>Chunks</span><b>1,000 chars · 150 overlap</b></div>
+          <div><span>Answer budget</span><b>1,500 tokens</b></div>
+          <div><span>Typical answer</span><b>15–30 seconds</b></div>
+        </div>
       </div>
-
-      <label class="sr-only" for="question">Your comparison question</label>
-      <textarea id="question" rows="3" maxlength="600"
-        placeholder="e.g. Compare the price, features and warranty offered in each document."></textarea>
-
-      <div class="chips" id="chips" aria-label="Suggested questions"></div>
-
-      <div class="actions">
-        <details class="settings">
-          <summary>Settings</summary>
-          <label for="k">Passages per PDF <output id="k-out">4</output></label>
-          <input id="k" type="range" min="2" max="8" value="4">
-        </details>
-        <span class="kbd-hint"><kbd>Ctrl</kbd> <kbd>Enter</kbd></span>
-        <button class="btn secondary" id="overview" type="button">Quick overview</button>
-        <button class="btn primary" id="compare" type="button">Compare</button>
-      </div>
-      <p class="notice" id="notice" role="alert" hidden></p>
     </section>
 
-    <section id="results" class="results" aria-live="polite" aria-label="Answers"></section>
+    <!-- FEATURES -->
+    <section id="features" class="wrap section">
+      <div class="section-head reveal">
+        <span class="eyebrow">Features</span>
+        <h2>Built for honest comparisons</h2>
+      </div>
+      <div class="features">
+        <article class="feature panel reveal"><span class="f-ic">▦</span><h3>One table, every document</h3><p>A column per PDF, a row per aspect. Easy to scan, easy to export.</p></article>
+        <article class="feature panel reveal"><span class="f-ic">⌀</span><h3>“Not mentioned”, never invented</h3><p>If a document doesn’t say it, the cell says so. The model is told never to guess.</p></article>
+        <article class="feature panel reveal"><span class="f-ic">§</span><h3>Page citations</h3><p>Values carry page numbers like (p. 2), and the Sources panel shows the exact passages used.</p></article>
+        <article class="feature panel reveal"><span class="f-ic">≋</span><h3>Live streaming</h3><p>Watch the table fill in as Qwen writes it, instead of waiting for a spinner.</p></article>
+        <article class="feature panel reveal"><span class="f-ic">⇣</span><h3>CSV &amp; Markdown export</h3><p>Download the comparison table for a report or a spreadsheet in one click.</p></article>
+        <article class="feature panel reveal"><span class="f-ic">◎</span><h3>Private by design</h3><p>PDFs are read in your browser; only the matched passages are sent to the model.</p></article>
+      </div>
+    </section>
 
-    <section class="empty" id="empty">
-      <div class="how">
-        <div><b>1</b><span>Each PDF gets its own search index</span></div>
-        <div><b>2</b><span>The best passages are taken from every PDF</span></div>
-        <div><b>3</b><span>One prompt asks the model for a comparison table</span></div>
+    <!-- SAMPLE -->
+    <section class="wrap section">
+      <div class="sample panel reveal">
+        <div class="sample-head">
+          <div>
+            <span class="eyebrow">Real output</span>
+            <h2>“Compare the price, features and warranty.”</h2>
+            <p class="muted">Three laptop spec sheets · Qwen 2.5 14B · answered in 26 s</p>
+          </div>
+          <a class="btn btn-ink" href="/app">Try it yourself</a>
+        </div>
+        <div class="table-wrap">
+          <table class="sample-table">
+            <thead><tr><th>Aspect</th><th>laptop_alpha.pdf</th><th>laptop_beta.pdf</th><th>laptop_gamma.pdf</th></tr></thead>
+            <tbody>
+              <tr><td>Price</td><td>Rs. 54,999</td><td>Rs. 72,500</td><td>Rs. 46,990</td></tr>
+              <tr><td>Processor</td><td>Intel Core i5 13th Gen</td><td>AMD Ryzen 7 7840HS</td><td>Intel Core i3 13th Gen</td></tr>
+              <tr><td>RAM</td><td>16 GB</td><td>16 GB</td><td>8 GB</td></tr>
+              <tr><td>Battery life</td><td>10 hours</td><td>8 hours</td><td>12 hours</td></tr>
+              <tr><td>Warranty</td><td>1 year onsite, extendable to 3 years (p. 2)</td><td>2 years carry-in, accidental damage</td><td class="nm">Not mentioned</td></tr>
+              <tr><td>Graphics card</td><td class="nm">Not mentioned</td><td>Dedicated RTX 4050</td><td class="nm">Not mentioned</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="wrap section stack reveal">
+      <span class="eyebrow">Built with</span>
+      <div class="stack-chips">
+        <span class="chip">Python</span><span class="chip">Streamlit</span><span class="chip">LangChain</span><span class="chip">FAISS</span>
+        <span class="chip">BM25</span><span class="chip">pdf.js</span><span class="chip">Qwen 2.5 14B</span><span class="chip">llama.cpp</span>
+        <span class="chip">Vercel</span><span class="chip">pytest</span>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="wrap section">
+      <div class="section-head reveal"><span class="eyebrow">FAQ</span><h2>Good questions</h2></div>
+      <div class="faq">
+        <details class="panel reveal"><summary>What kind of PDFs work?</summary><p>Text-based PDFs: spec sheets, brochures, policies, reports. Scanned images without a text layer can’t be read yet (there’s no OCR).</p></details>
+        <details class="panel reveal"><summary>Are my files uploaded?</summary><p>No. The browser extracts the text. Only the few passages matched to your question are sent to the model, and nothing is stored.</p></details>
+        <details class="panel reveal"><summary>Why does an answer take 15–30 seconds?</summary><p>The model runs on a single lab GPU at about 5–6 tokens per second. The answer streams in, so you can start reading straight away.</p></details>
+        <details class="panel reveal"><summary>What does “Not mentioned” mean?</summary><p>The document has no information for that aspect. The prompt forbids guessing or using outside knowledge, so gaps are shown honestly.</p></details>
+        <details class="panel reveal"><summary>Why is the model sometimes offline?</summary><p>Qwen runs on a lab machine reached through a tunnel. If that machine or the tunnel is down, the status shows “Model offline” and the app tells you clearly.</p></details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="wrap section">
+      <div class="cta reveal">
+        <div class="cta-glow"></div>
+        <div class="cta-copy">
+          <h2>Ready to compare?</h2>
+          <p>Bring your own PDFs, or try the three sample laptop spec sheets.</p>
+          <a class="btn btn-light btn-lg" href="/app">Open the app</a>
+        </div>
+        <div class="pip cta-pip" data-pip></div>
       </div>
     </section>
   </main>
 
   <footer class="wrap footer">
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>COMPARE</a>
     <span>Multi-PDF Comparison Tool · LLM mini project PS 35</span>
-    <span>Qwen 2.5 14B · <a href="https://github.com/Roshan-w/llm-ps35-35">Source on GitHub</a></span>
+    <a href="https://github.com/Roshan-w/llm-ps35-35">Source on GitHub</a>
   </footer>
 
-  <template id="result-tpl">
-    <article class="result">
-      <header>
-        <h3 class="q"></h3>
-        <p class="meta"></p>
-      </header>
-      <div class="answer md"><div class="skeleton"><i></i><i></i><i></i><i></i></div></div>
-      <footer class="result-foot" hidden>
-        <div class="tools">
-          <button class="tool" data-act="copy" type="button">Copy</button>
-          <button class="tool" data-act="md" type="button">Markdown</button>
-          <button class="tool" data-act="csv" type="button">CSV</button>
-        </div>
-        <details class="sources"><summary>Sources</summary><div class="src-list"></div></details>
-      </footer>
-    </article>
-  </template>
-
-  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-  <script type="module" src="/static/app.js"></script>
+  <script type="module" src="/static/mascot.js"></script>
+  <script type="module" src="/static/landing.js"></script>
 </body>
 </html>

@@ -16,6 +16,8 @@ class Dev(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/api/health"):
             return health.handler.do_GET(self)
+        if self.path.split("?")[0] == "/app":  # mirror Vercel cleanUrls
+            self.path = "/app.html"
         return super().do_GET()
 
     def do_POST(self):

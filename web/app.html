@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compare · Workspace</title>
+  <meta name="description" content="Compare 2–3 PDFs side by side with Qwen 2.5 14B.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23221c1d'/%3E%3Crect x='9' y='9' width='5.5' height='14' rx='2' fill='%23fff'/%3E%3Crect x='17.5' y='9' width='5.5' height='14' rx='2' fill='%23fff' opacity='.55'/%3E%3C/svg%3E">
+  <script>try{var t=localStorage.getItem("compare-theme");document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Doto:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/theme.css">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="shell">
+    <!-- SIDEBAR -->
+    <aside class="side panel" id="side">
+      <div class="side-top">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>COMPARE</a>
+        <button class="icon-btn ghost" id="side-close" type="button" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M9 4.5v15"/></svg>
+        </button>
+      </div>
+      <nav class="side-nav" aria-label="Main">
+        <a class="active" href="/app" data-nav="home">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.6 3.6a2 2 0 0 1 2.8 0l6.6 6.2c.6.5.9 1.2.9 2V19a2 2 0 0 1-2 2h-3.5a1 1 0 0 1-1-1v-4.5h-4.8V20a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2v-7.2c0-.8.3-1.5.9-2Z"/></svg>Home</a>
+        <button type="button" data-nav="history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4v4h4M12 8v4l3 2"/></svg>History<span class="badge" id="hist-count" hidden>0</span></button>
+        <button type="button" data-nav="samples">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 8.5 4.5L12 12 3.5 7.5Z"/><path d="m3.5 12 8.5 4.5 8.5-4.5M3.5 16.5 12 21l8.5-4.5"/></svg>Sample PDFs</button>
+        <a href="/#how">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>How it works</a>
+        <button type="button" data-nav="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4Z"/><circle cx="12" cy="12" r="3"/></svg>Settings</button>
+      </nav>
+
+      <div class="side-group">
+        <div class="side-group-head">Quick actions</div>
+        <button type="button" data-nav="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="4.5"/><circle cx="16" cy="8" r="4.5"/><circle cx="12" cy="15.5" r="4.5"/></svg>Quick overview</button>
+        <button type="button" data-nav="export">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Export table <span class="tag">CSV</span></button>
+      </div>
+
+      <div class="side-card">
+        <div class="side-card-top">
+          <div class="pip mini-pip" data-pip></div>
+          <div><b>Pip</b><span>Your comparison buddy</span></div>
+        </div>
+        <a class="btn side-cta" href="https://github.com/Roshan-w/llm-ps35-35">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.9-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg>
+          View source</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="side-open" type="button" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <label class="cmd">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/></svg>
+          <input id="cmd" type="text" placeholder="Ask a quick comparison question" autocomplete="off">
+          <kbd id="cmd-kbd">Ctrl K</kbd>
+        </label>
+        <div class="top-right">
+          <span class="status" id="status"><svg class="bolt" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></svg><span class="status-text">Checking model…</span></span>
+          <div class="split-btn">
+            <button class="btn btn-ink" id="new-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New comparison</button>
+            <button class="btn btn-ink split-more" id="new-menu" type="button" aria-label="More" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="menu" id="menu" hidden>
+              <button type="button" data-nav="samples">Load sample PDFs</button>
+              <button type="button" data-nav="overview">Quick overview</button>
+              <button type="button" data-nav="clear">Clear answers</button>
+            </div>
+          </div>
+          <div class="theme-switch" role="group" aria-label="Theme">
+            <button type="button" data-theme-set="dark" aria-label="Dark mode" data-icon="moon"></button>
+            <button type="button" data-theme-set="light" aria-label="Light mode" data-icon="sun"></button>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- CENTER -->
+        <section class="center" id="center">
+          <div class="welcome" id="welcome">
+            <div class="welcome-pip-wrap">
+              <div class="glow-blob" style="width:260px;height:260px;left:50%;top:44%;transform:translate(-50%,-50%)"></div>
+              <div class="pip main-pip" id="pip" data-pip></div>
+            </div>
+            <h1 class="grad" id="greet">Welcome back!</h1>
+            <p class="sub" id="sub">Which documents should we compare today?</p>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="composer panel" id="composer">
+              <div class="attached" id="attached"></div>
+              <label class="sr-only" for="question">Your comparison question</label>
+              <textarea id="question" rows="2" maxlength="600" placeholder="Ask me to compare anything across your PDFs…"></textarea>
+              <div class="composer-row">
+                <button class="icon-btn" id="add-btn" type="button" aria-label="Add PDFs" title="Add PDFs">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+                <button class="icon-btn" id="tune-btn" type="button" aria-label="Settings" title="Settings">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
+                <span class="model-chip"><span class="spark">✦</span>Qwen 2.5 14B</span>
+                <span class="hint" id="hint">Add 2–3 PDFs to begin</span>
+                <button class="send" id="send" type="button" aria-label="Compare" title="Compare (Ctrl+Enter)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5-7.5-4Z"/></svg></button>
+              </div>
+              <input id="file" type="file" accept="application/pdf" multiple hidden>
+              <div class="drop-veil" aria-hidden="true">Drop PDFs to add them</div>
+            </div>
+            <div class="composer-links">
+              <button type="button" class="link" data-nav="samples"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20Z"/><path d="M14 3.5V8h4"/></svg>Use sample PDFs</button>
+              <button type="button" class="link" data-nav="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Quick overview</button>
+            </div>
+            <p class="notice" id="notice" role="alert" hidden></p>
+          </div>
+
+          <div class="ideas" id="ideas">
+            <button class="idea" type="button" data-q="Compare the price, features and warranty offered in each document.">
+              <span class="idea-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 10h17M9.5 10v9"/></svg></span>
+              <b>Compare key facts</b><span>Price, features and warranty as one table with page citations.</span></button>
+            <button class="idea" type="button" data-q="Which option is better for a student on a budget, and why?">
+              <span class="idea-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></span>
+              <b>Find the best fit</b><span>Ask which document suits a need, with the reasons side by side.</span></button>
+            <button class="idea" type="button" data-q="List the strengths and weaknesses mentioned in each document.">
+              <span class="idea-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2v1h6v-1c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3Z"/></svg></span>
+              <b>Strengths &amp; weaknesses</b><span>A quick pros and cons for every document you added.</span></button>
+          </div>
+
+          <div class="results" id="results" aria-live="polite" aria-label="Answers"></div>
+        </section>
+
+        <!-- RIGHT PANEL -->
+        <aside class="rail" id="rail">
+          <div class="panel rail-card">
+            <div class="rail-head">
+              <div class="tabs" role="tablist">
+                <button role="tab" aria-selected="true" data-tab="session">Session</button>
+                <button role="tab" aria-selected="false" data-tab="settings">Settings</button>
+              </div>
+              <button class="icon-btn sm" id="reset-btn" type="button" title="Start over" aria-label="Start over">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v4h4"/></svg></button>
+            </div>
+
+            <div class="tab-body" data-body="session">
+              <div class="field-label">Model</div>
+              <div class="select-like"><span class="spark">✦</span>Qwen 2.5 14B Instruct<span class="sel-meta">lab GPU</span></div>
+              <div class="model-note" id="model-note">32K context · ~5.5 tokens/s · streaming</div>
+            </div>
+            <div class="tab-body" data-body="settings" hidden>
+              <div class="field-label">Passages per PDF <output id="k-out">4</output></div>
+              <input id="k" type="range" min="2" max="8" value="4">
+              <p class="model-note">More passages give more context but slower answers.</p>
+              <div class="field-label">Theme</div>
+              <div class="theme-switch wide" role="group" aria-label="Theme">
+                <button type="button" data-theme-set="light" aria-label="Light">Light</button>
+                <button type="button" data-theme-set="dark" aria-label="Dark">Dark</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel rail-card">
+            <div class="row-head"><h3>Context used</h3><button class="add" type="button" id="ctx-info" title="Estimated share of the 32K-token window">?</button></div>
+            <div class="row-sub"><span id="ctx-label">No documents yet</span><b id="ctx-pct">0%</b></div>
+            <div class="meter" id="ctx-meter"></div>
+          </div>
+
+          <div class="panel rail-card">
+            <div class="row-head"><h3>Documents</h3><button class="add" type="button" id="add-btn-2">+ Add</button></div>
+            <ul class="doc-list" id="doc-list"></ul>
+            <p class="empty-note" id="doc-empty">Add 2–3 PDFs, or <button class="inline-link" type="button" data-nav="samples">use the samples</button>.</p>
+          </div>
+
+          <div class="panel rail-card" id="history">
+            <div class="row-head"><h3>Recent</h3><span class="count" id="recent-count">0</span></div>
+            <ul class="recent" id="recent"></ul>
+            <p class="empty-note" id="recent-empty">Your questions will appear here.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <template id="result-tpl">
+    <article class="result panel">
+      <header class="result-head">
+        <div class="result-q"><span class="q-ic">?</span><h2 class="q"></h2></div>
+        <p class="meta"></p>
+      </header>
+      <div class="answer md"><div class="skeleton"><i></i><i></i><i></i><i></i></div></div>
+      <footer class="result-foot" hidden>
+        <div class="tools">
+          <button class="tool" data-act="copy" type="button">Copy</button>
+          <button class="tool" data-act="md" type="button">Markdown</button>
+          <button class="tool" data-act="csv" type="button">CSV</button>
+        </div>
+        <details class="sources"><summary>Sources</summary><div class="src-list"></div></details>
+      </footer>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script type="module" src="/static/mascot.js"></script>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

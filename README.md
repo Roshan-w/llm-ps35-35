@@ -26,7 +26,7 @@
 - LLM: Qwen 2.5 14B via an OpenAI-compatible endpoint (default), Llama 3.3 70B via Groq, Gemini 2.5 Flash, or a local Ollama model
 
 ## Web version (Vercel)
-A minimal web UI (`web/`) deployed on Vercel: PDFs are read in the browser with pdf.js, and a small Python
+A landing page (`/`, how it works, infographics, architecture, FAQ) and a dashboard workspace (`/app`) with Pip, an animated SVG mascot, in a soft rose theme with light and dark modes, deployed on Vercel: PDFs are read in the browser with pdf.js, and a small Python
 serverless function (standard library only) builds a BM25 index per PDF, retrieves the top passages from each one,
 and streams the answer from the LLM using the same prompt as the Streamlit app (`src/prompt.py`).
 
@@ -87,9 +87,11 @@ docker build -t pdf-compare . && docker run -p 8501:8501 --env-file .env pdf-com
 ```
 
 ## Screenshots
-Web UI (live on Vercel):
+Web version (live on Vercel): landing page and workspace.
 
-![Web UI](screenshots/05_web_ui.png)
+![Landing page](screenshots/05_web_ui.png)
+
+![Workspace](screenshots/06_web_result.png)
 
 Real outputs from Qwen 2.5 14B on the three sample PDFs (more in `screenshots/`).
 
