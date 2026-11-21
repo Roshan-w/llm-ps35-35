@@ -149,7 +149,8 @@ def stream_answer(prompt, temperature=0.2):
     body = json.dumps({"model": LLM_MODEL, "stream": True, "temperature": temperature, "max_tokens": LLM_MAX_TOKENS,
                        "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request(f"{LLM_BASE_URL}/chat/completions", data=body, method="POST", headers={
-        "Content-Type": "application/json", "Authorization": f"Bearer {_key()}", "Accept": "text/event-stream"})
+        "Content-Type": "application/json", "Authorization": f"Bearer {_key()}", "Accept": "text/event-stream",
+        "ngrok-skip-browser-warning": "1"})
     try:
         with urllib.request.urlopen(req, timeout=LLM_TIMEOUT) as resp:
             for raw in resp:
@@ -176,7 +177,8 @@ def stream_answer(prompt, temperature=0.2):
 
 def health():
     try:
-        req = urllib.request.Request(f"{LLM_BASE_URL}/models", headers={"Authorization": f"Bearer {_key()}"})
+        req = urllib.request.Request(f"{LLM_BASE_URL}/models", headers={"Authorization": f"Bearer {_key()}",
+                                                                         "ngrok-skip-browser-warning": "1"})
         with urllib.request.urlopen(req, timeout=8) as resp:
             ids = [m.get("id") for m in json.load(resp).get("data", [])]
         return {"ok": True, "model": LLM_MODEL, "available": LLM_MODEL in ids or bool(ids)}
